@@ -26,8 +26,9 @@ class Google_api
             Google_Service_Gmail::GMAIL_MODIFY,
             Google_Service_Calendar::CALENDAR,
             Google_Service_Drive::DRIVE,
-            Google_Service_Docs::DOCUMENTS,
-            'https://www.googleapis.com/auth/meetings',
+            Google_Service_Docs::DOCUMENTS
+            // Google Meet does not have a dedicated API scope.
+            // Calendar scope provides access to create conference links.
         ]);
         $this->client->setSubject($settings['google_email']); // Impersonate admin email
     }
@@ -64,6 +65,7 @@ class Google_api
         return $this->services['docs'];
     }
 
-    // Add similar methods for other services (e.g., Meet)
+    // Meet functionality is handled via the Calendar service
+    // by generating conference links when creating events.
 }
 ?>

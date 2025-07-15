@@ -107,7 +107,8 @@ class Google_workspace_model extends App_Model
 
     public function get_meetings($staff_id)
     {
-        // Placeholder for Google Meet API (not fully public, may require Calendar API for meeting links)
+        // Google currently exposes Meet features through the Calendar API.
+        // Use events with conference data to manage meeting links.
         return [];
     }
 
