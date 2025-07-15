@@ -68,40 +68,66 @@ class Google_workspace_model extends App_Model
     {
         $this->load->library('google_api');
         $drive = $this->google_api->get_drive_service();
-        $files = $drive->files->listFiles([
-            'q' => "trashed=false",
-            'fields' => 'files(id,name,mimeType,webViewLink)',
-        ]);
+        $pageToken = null;
         $result = [];
+        $optParams = [
+            'q' => "trashed=false",
+            'fields' => 'nextPageToken, files(id,name,mimeType,webViewLink)',
+        ];
 
-        foreach ($files->getFiles() as $file) {
-            $result[] = [
-                'id' => $file->getId(),
-                'name' => $file->getName(),
-                'mimeType' => $file->getMimeType(),
-                'webViewLink' => $file->getWebViewLink(),
-            ];
+        try {
+            do {
+                if ($pageToken) {
+                    $optParams['pageToken'] = $pageToken;
+                }
+                $files = $drive->files->listFiles($optParams);
+                foreach ($files->getFiles() as $file) {
+                    $result[] = [
+                        'id' => $file->getId(),
+                        'name' => $file->getName(),
+                        'mimeType' => $file->getMimeType(),
+                        'webViewLink' => $file->getWebViewLink(),
+                    ];
+                }
+                $pageToken = $files->getNextPageToken();
+            } while ($pageToken);
+        } catch (Google_Service_Exception $e) {
+            log_message('error', 'Google Drive query failed: ' . $e->getMessage());
         }
+
         return $result;
     }
 
     public function get_docs($staff_id)
     {
         $this->load->library('google_api');
-        $docs = $this->google_api->get_docs_service();
-        $files = $this->google_api->get_drive_service()->files->listFiles([
-            'q' => "mimeType='application/vnd.google-apps.document' or mimeType='application/vnd.google-apps.spreadsheet'",
-            'fields' => 'files(id,name,webViewLink)',
-        ]);
+        $drive = $this->google_api->get_drive_service();
+        $pageToken = null;
         $result = [];
+        $optParams = [
+            'q' => "mimeType='application/vnd.google-apps.document' or mimeType='application/vnd.google-apps.spreadsheet'",
+            'fields' => 'nextPageToken, files(id,name,webViewLink)',
+        ];
 
-        foreach ($files->getFiles() as $file) {
-            $result[] = [
-                'id' => $file->getId(),
-                'name' => $file->getName(),
-                'webViewLink' => $file->getWebViewLink(),
-            ];
+        try {
+            do {
+                if ($pageToken) {
+                    $optParams['pageToken'] = $pageToken;
+                }
+                $files = $drive->files->listFiles($optParams);
+                foreach ($files->getFiles() as $file) {
+                    $result[] = [
+                        'id' => $file->getId(),
+                        'name' => $file->getName(),
+                        'webViewLink' => $file->getWebViewLink(),
+                    ];
+                }
+                $pageToken = $files->getNextPageToken();
+            } while ($pageToken);
+        } catch (Google_Service_Exception $e) {
+            log_message('error', 'Google Drive query failed: ' . $e->getMessage());
         }
+
         return $result;
     }
 
