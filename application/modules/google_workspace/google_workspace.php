@@ -60,6 +60,24 @@ class Google_workspace extends Module
             'icon'     => 'fa fa-google',
             'position' => 40,
         ]);
+
+        $children = [
+            'email'    => 'email',
+            'calendar' => 'calendar',
+            'meet'     => 'meet',
+            'drive'    => 'drive',
+            'docs'     => 'docs',
+            'settings' => 'settings',
+        ];
+
+        foreach ($children as $slug => $uri) {
+            $CI->app_menu->add_sidebar_children_item('google_workspace', [
+                'slug'     => 'google_workspace_' . $slug,
+                'name'     => _l('google_workspace_' . $slug),
+                'href'     => admin_url('google_workspace/' . $uri),
+                'position' => 5,
+            ]);
+        }
     }
 
     public function load_language()
@@ -70,7 +88,11 @@ class Google_workspace extends Module
 
     public function add_assets()
     {
+        echo '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" />';
+        echo '<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />';
         echo '<link rel="stylesheet" type="text/css" href="' . module_dir_url('google_workspace', 'assets/css/google_workspace.css') . '" />';
+        echo '<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>';
+        echo '<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>';
         echo '<script src="' . module_dir_url('google_workspace', 'assets/js/google_workspace.js') . '"></script>';
     }
 }

@@ -11,12 +11,18 @@ class Google_workspace extends AdminController
 
     public function index()
     {
+        if (!has_permission('google_workspace', '', 'view')) {
+            access_denied('google_workspace');
+        }
         $data['title'] = _l('google_workspace');
         $this->load->view('google_workspace/dashboard', $data);
     }
 
     public function email()
     {
+        if (!has_permission('google_workspace', '', 'view')) {
+            access_denied('google_workspace');
+        }
         $data['title']  = _l('google_workspace_email');
         $data['emails'] = $this->google_workspace_model->get_emails(get_staff_user_id());
         $this->load->view('google_workspace/email', $data);
@@ -24,6 +30,9 @@ class Google_workspace extends AdminController
 
     public function calendar()
     {
+        if (!has_permission('google_workspace', '', 'view')) {
+            access_denied('google_workspace');
+        }
         $data['title']  = _l('google_workspace_calendar');
         $data['events'] = $this->google_workspace_model->get_calendar_events(get_staff_user_id());
         $this->load->view('google_workspace/calendar', $data);
@@ -31,6 +40,9 @@ class Google_workspace extends AdminController
 
     public function meet()
     {
+        if (!has_permission('google_workspace', '', 'view')) {
+            access_denied('google_workspace');
+        }
         $data['title']    = _l('google_workspace_meet');
         $data['meetings'] = $this->google_workspace_model->get_meetings(get_staff_user_id());
         $this->load->view('google_workspace/meet', $data);
@@ -38,6 +50,9 @@ class Google_workspace extends AdminController
 
     public function drive()
     {
+        if (!has_permission('google_workspace', '', 'view')) {
+            access_denied('google_workspace');
+        }
         $data['title'] = _l('google_workspace_drive');
         $data['files'] = $this->google_workspace_model->get_drive_files(get_staff_user_id());
         $this->load->view('google_workspace/drive', $data);
@@ -45,6 +60,9 @@ class Google_workspace extends AdminController
 
     public function docs()
     {
+        if (!has_permission('google_workspace', '', 'view')) {
+            access_denied('google_workspace');
+        }
         $data['title'] = _l('google_workspace_docs');
         $data['docs']  = $this->google_workspace_model->get_docs(get_staff_user_id());
         $this->load->view('google_workspace/docs', $data);
@@ -52,6 +70,9 @@ class Google_workspace extends AdminController
 
     public function settings()
     {
+        if (!has_permission('google_workspace', '', 'edit')) {
+            access_denied('google_workspace');
+        }
         $data['title'] = _l('google_workspace_settings');
         if ($this->input->post()) {
             $this->google_workspace_model->update_settings($this->input->post());
