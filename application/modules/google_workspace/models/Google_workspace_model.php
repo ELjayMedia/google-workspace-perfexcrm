@@ -181,4 +181,3 @@ class Google_workspace_model extends App_Model
         return '';
     }
 }
-?>

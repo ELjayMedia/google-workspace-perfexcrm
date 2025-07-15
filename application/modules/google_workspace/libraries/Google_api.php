@@ -68,4 +68,3 @@ class Google_api
     // Meet functionality is handled via the Calendar service
     // by generating conference links when creating events.
 }
-?>
