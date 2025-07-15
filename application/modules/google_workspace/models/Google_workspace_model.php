@@ -160,9 +160,31 @@ class Google_workspace_model extends App_Model
 
     public function get_meetings($staff_id)
     {
-        // Google currently exposes Meet features through the Calendar API.
-        // Use events with conference data to manage meeting links.
-        return [];
+        $this->load->library('google_api');
+        $calendar = $this->google_api->get_calendar_service();
+
+        $events = $calendar->events->listEvents('primary', [
+            'timeMin' => date('c'),
+            'maxResults' => 50,
+            'singleEvents' => true,
+            'orderBy' => 'startTime',
+        ]);
+
+        $result = [];
+        foreach ($events->getItems() as $event) {
+            $hangout = $event->getHangoutLink();
+            if ($hangout) {
+                $result[] = [
+                    'id' => $event->getId(),
+                    'summary' => $event->getSummary(),
+                    'hangoutLink' => $hangout,
+                    'start' => $event->getStart()->getDateTime(),
+                    'end' => $event->getEnd()->getDateTime(),
+                ];
+            }
+        }
+
+        return $result;
     }
 
     public function get_user_mapping($staff_id)
