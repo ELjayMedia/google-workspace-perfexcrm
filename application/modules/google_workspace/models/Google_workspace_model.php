@@ -11,12 +11,39 @@ class Google_workspace_model extends App_Model
 
     public function update_settings($data)
     {
-        $this->db->where('id', 1);
-        $this->db->update(db_prefix() . 'google_workspace_settings', [
+        // Basic validation
+        if (!is_array($data)
+            || !isset($data['api_key'])
+            || !isset($data['service_account_credentials'])
+            || !isset($data['enabled_features'])
+            || !is_array($data['enabled_features'])) {
+            return false;
+        }
+
+        $record = [
             'api_key' => $data['api_key'],
             'service_account_credentials' => $data['service_account_credentials'],
             'enabled_features' => json_encode($data['enabled_features']),
-        ]);
+        ];
+
+        try {
+            // Check if the settings row exists
+            $this->db->where('id', 1);
+            $exists = $this->db->get(db_prefix() . 'google_workspace_settings')->row();
+
+            if ($exists) {
+                $this->db->where('id', 1);
+                $this->db->update(db_prefix() . 'google_workspace_settings', $record);
+            } else {
+                $record['id'] = 1;
+                $this->db->insert(db_prefix() . 'google_workspace_settings', $record);
+            }
+
+            return $this->db->affected_rows() >= 0;
+        } catch (Exception $e) {
+            log_message('error', 'Failed to update Google Workspace settings: ' . $e->getMessage());
+            return false;
+        }
     }
 
     public function get_emails($staff_id)
