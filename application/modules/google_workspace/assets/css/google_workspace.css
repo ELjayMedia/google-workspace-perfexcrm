@@ -1,0 +1,10 @@
+.google-workspace-dashboard {
+    padding: 20px;
+}
+.google-workspace-list {
+    list-style: none;
+    padding: 0;
+}
+.google-workspace-list li {
+    margin-bottom: 10px;
+}
