@@ -15,7 +15,10 @@ class Google_api
 
     private function initialize_client()
     {
-        require_once APPPATH . 'vendor/autoload.php';
+        // Load Composer dependencies from the repository root
+        // The library lives inside the module directory, four levels deep
+        // from the repository root where the `vendor/` folder resides.
+        require_once __DIR__ . '/../../../../vendor/autoload.php';
 
         $settings = $this->CI->google_workspace_model->get_settings();
         $credentials = json_decode($settings['service_account_credentials'], true);
