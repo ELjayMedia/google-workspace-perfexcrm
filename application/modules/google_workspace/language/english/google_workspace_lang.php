@@ -11,3 +11,4 @@ $lang['email_from'] = 'From';
 $lang['email_subject'] = 'Subject';
 $lang['email_date'] = 'Date';
 $lang['email_snippet'] = 'Snippet';
+$lang['google_workspace_feature_disabled'] = 'This feature is disabled.';
