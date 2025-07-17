@@ -1,0 +1,20 @@
+name: PerfexCRM Module
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  php-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+      - name: PHP syntax check
+        run: find . -name '*.php' -print0 | xargs -0 -n 1 php -l
