@@ -6,4 +6,4 @@ This repository relies on Composer for dependency management. After cloning the 
 composer install
 ```
 
-Running this command downloads the required packages and creates the `vendor/` directory used by the application.
+Running this command downloads the required packages and creates the `vendor/` directory in the repository root. The application and modules expect this location when loading Composer dependencies.
